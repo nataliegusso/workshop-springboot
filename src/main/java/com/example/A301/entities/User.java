@@ -1,13 +1,20 @@
 package com.example.A301.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity   //Mapear o JPA, as anotações auxiliam o JPA  //@Entity:
+@Table(name = "tb_user")
 public class User implements Serializable {  //serializable: transformado em cadeias de bits
 
 	private static final long serialVersionUID = 1L;
@@ -20,6 +27,14 @@ public class User implements Serializable {  //serializable: transformado em cad
 	private String phone;
 	private String password;
 
+
+	//por padrão no jpa sempre que chamar o objeto do muitos, chama o do 1 tbm (o pedido chamará o cliente associado)
+	//lazy loading: qdo tem uma assossiação muitos p 1, se carrega um objeto do lado do muitos carrega automaticamente. O inverso não acontece p não estourar a memória	
+	//spring.jpa.open-in-view=true é true para habilitar a possibilidade do json chamar o jpa p trazer os pedidos
+	@JsonIgnore  //O one to many chama o many to one que chama... virou um looping. Esse comando elimina isso
+	@OneToMany(mappedBy = "client")  //indica relacionamento entre o cliente e o pedido (opcional), obrigatório p pedido-cliente
+	private List<Order> orders = new ArrayList<>(); //Um user pode ter várias orders
+	
 	public User() {
 	}
 
@@ -71,7 +86,11 @@ public class User implements Serializable {  //serializable: transformado em cad
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
+	public List<Order> getOrders() { 	//ArrayList só tem get e não tem set, não pode mudar a lista, só aumentar
+		return orders;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
