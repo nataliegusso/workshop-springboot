@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.example.A301.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
@@ -25,6 +26,8 @@ public class Order implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")  //para garantir a formatação UTC
 	private Instant moment;  //Instant: p registrar um instante (melhor que date)
 
+	private Integer orderStatus;  //Vou colocar o integer pq vou lidar com números, mas externamente é OrderStatus. 
+	
 	//@JsonIgnore  //se o json ficar deste lado ele relaciona as ordens ao usuário. 
 	@ManyToOne  //indica relacionamento entre o pedido e o cliente  //esse relacionamento é opcional p cliente-pedido. Olhe lá no User
 	@JoinColumn(name = "client_id")  //client_id: nome da chave estrangeira
@@ -33,10 +36,11 @@ public class Order implements Serializable {
 	public Order() {
 	}
 
-	public Order(Long id, Instant moment, User client) {
+	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		super();
 		this.id = id;
 		this.moment = moment;
+		setOrderStatus(orderStatus);
 		this.client = client;
 	}
 
@@ -56,6 +60,16 @@ public class Order implements Serializable {
 		this.moment = moment;
 	}
 
+	public OrderStatus getOrderStatus() {
+		return OrderStatus.valueOf(orderStatus);  //Método (F3) p converter inteiro p OrderStatus
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		if (orderStatus != null) {
+			this.orderStatus = orderStatus.getCode();  //p converter OrderStatus p inteiro
+		}
+	}
+	
 	public User getClient() {
 		return client;
 	}
