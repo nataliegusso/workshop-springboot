@@ -13,7 +13,7 @@ import com.example.A301.entities.Order;
 import com.example.A301.services.OrderService;
 
 @RestController						//implementado por um controlador rest
-@RequestMapping(value = "/order")	//nome p recurso
+@RequestMapping(value = "/orders")	//nome p recurso
 public class OrderResource {
 
 	@Autowired
