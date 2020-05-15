@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +49,12 @@ public class UserResource {
 				.buildAndExpand(obj.getId()).toUri();  //Texto personalizado p mensagem 201
 		//return ResponseEntity.ok().body(obj); //Texto ok
 		return ResponseEntity.created(uri).body(obj);
+	}
+	
+	@DeleteMapping(value = "/{id}")  //Qdo tem pedido aberto não apaga (500)
+	public ResponseEntity<Void> delete(@PathVariable Long id) {  //@PathVariable: p id ser reconhecido como variável url
+		service.delete(id);
+		return ResponseEntity.noContent().build();  //Retorna resposta vazia (204)
 	}
 }
 
