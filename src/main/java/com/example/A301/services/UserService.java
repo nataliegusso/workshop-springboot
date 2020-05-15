@@ -35,4 +35,15 @@ public class UserService {
 		repository.deleteById(id);
 	}
 	
+	public User update(Long id, User obj) {
+		User entity = repository.getOne(id);  //getOne: instancia um usuário, mas não vai no BD, só é monitorado no JPA p uma operação posterior. É mais eficiente.
+		updateData(entity, obj);
+		return repository.save(entity);
+	}
+
+	private void updateData(User entity, User obj) {
+		entity.setName(obj.getName());
+		entity.setEmail(obj.getEmail());
+		entity.setPhone(obj.getPhone());
+	}
 }
