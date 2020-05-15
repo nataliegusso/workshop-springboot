@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import com.example.A301.entities.Category;
 import com.example.A301.entities.Order;
 import com.example.A301.entities.OrderItem;
+import com.example.A301.entities.Payment;
 import com.example.A301.entities.Product;
 import com.example.A301.entities.User;
 import com.example.A301.entities.enums.OrderStatus;
@@ -82,5 +83,9 @@ public class TestConfig implements CommandLineRunner {  //Vai popular o BD (data
 	OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
 	
 	orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
+	
+	Payment pay1 = new Payment(null, Instant.parse("2019-06-20T21:53:07Z"), o1);
+	o1.setPayment(pay1);//P salvar não é o repositroy do próprio objeto, é uma associação de mão dupla com o pedido
+	orderRepository.save(o1);
 	}	
 }
