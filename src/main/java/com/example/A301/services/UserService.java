@@ -26,4 +26,8 @@ public class UserService {
 		Optional<User> obj = repository.findById(id);  //findById retorna um Optional  //https://blog.caelum.com.br/chega-de-nullpointerexception-trabalhe-com-o-java-util-optional
 		return obj.get();
 	}
+	
+	public User insert(User obj) {
+		return repository.save(obj);
+	}
 }

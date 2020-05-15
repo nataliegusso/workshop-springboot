@@ -1,13 +1,17 @@
 package com.example.A301.resources;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.A301.entities.User;
 import com.example.A301.services.UserService;
@@ -35,6 +39,15 @@ public class UserResource {
 	public ResponseEntity<User> findById(@PathVariable Long id) {  //Por causa do parâmentro value = id, p Spring aceitar, tenho que declarar @PathVariable
 		User obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
+	}
+	
+	@PostMapping  //Qdo insere, usa o @PostMapping
+	public ResponseEntity<User> insert(@RequestBody User obj){  //Retorna User e recebe User  //@RequestBody garante a deserialização p objeto (transforma bit em objeto Java)
+		obj = service.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(obj.getId()).toUri();  //Texto personalizado p mensagem 201
+		//return ResponseEntity.ok().body(obj); //Texto ok
+		return ResponseEntity.created(uri).body(obj);
 	}
 }
 
