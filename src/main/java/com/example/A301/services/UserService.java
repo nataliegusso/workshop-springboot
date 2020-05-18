@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.A301.entities.User;
 import com.example.A301.repositories.UserRepository;
+import com.example.A301.services.exceptions.ResourceNotFoundException;
 
 
 
@@ -24,7 +25,8 @@ public class UserService {
 
 	public User findById(Long id) {
 		Optional<User> obj = repository.findById(id);  //findById retorna um Optional  //https://blog.caelum.com.br/chega-de-nullpointerexception-trabalhe-com-o-java-util-optional
-		return obj.get();
+		//return obj.get(); //Gera exceção 500. Quero a personalizada
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
 	public User insert(User obj) {
